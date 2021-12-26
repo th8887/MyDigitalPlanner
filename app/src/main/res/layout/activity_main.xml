@@ -23,16 +23,33 @@
             android:layout_weight="5" />
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="5"
+            android:layout_weight="10"
             android:text="Log In:"
-            android:textSize="20sp" />
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="34sp" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="5" />
+            android:layout_weight="2" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="10"
+            android:ems="10"
+            android:hint="name"
+            android:inputType="textPersonName" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2" />
 
         <EditText
             android:id="@+id/email"
@@ -46,10 +63,10 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="2.5" />
+            android:layout_weight="2" />
 
         <EditText
-            android:id="@+id/pass"
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="10"
@@ -60,7 +77,32 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="2.5" />
+            android:layout_weight="2" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="10"
+            android:ems="10"
+            android:hint="phone"
+            android:inputType="phone" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="8"
+            android:text="Stay Connected." />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,6 +122,7 @@
                     android:layout_weight="10" />
 
                 <TextView
+                    android:id="@+id/tvin"
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="80"
@@ -104,11 +147,12 @@
                     android:layout_weight="60" />
 
                 <Button
+                    android:id="@+id/ls"
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="30"
-                    android:onClick="signIn"
-                    android:text="sign in " />
+                    android:text="sign in "
+                    android:onClick="enter"/>
 
                 <Space
                     android:layout_width="0px"
@@ -122,7 +166,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="40" />
+            android:layout_weight="20" />
     </LinearLayout>
 
     <Space

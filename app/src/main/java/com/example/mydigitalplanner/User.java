@@ -8,6 +8,12 @@ public class User {
     private String uID;
     private ArrayList<String> category;
 
+    public void User(String name, int phone, String uID, ArrayList<String> category) {
+        this.category = category;
+        this.name = name;
+        this.phone = phone;
+        this.uID= uID;
+    }
     public int getPhone() {
         return phone;
     }
@@ -40,9 +46,7 @@ public class User {
         this.uID = uID;
     }
 
-    public void addCategory(String s){
-        category.add(s);
-    }
+    public void addCategory(String s){ category.add(s); }
 
     @Override
     public String toString() {
