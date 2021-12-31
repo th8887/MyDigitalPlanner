@@ -4,17 +4,21 @@ import java.util.ArrayList;
 
 public class User {
     private String name;
-    private int phone;
+    private String phone;
     private String uID;
+    private String email;
+    boolean active;
     private ArrayList<String> category;
 
-    public void User(String name, int phone, String uID, ArrayList<String> category) {
-        this.category = category;
+    public User(String name, String email, String phone, String uID,boolean active) {
         this.name = name;
+        this.email=email;
         this.phone = phone;
         this.uID= uID;
+        this.active= active;
+        this.category=null;
     }
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -38,7 +42,7 @@ public class User {
         this.name = name;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
