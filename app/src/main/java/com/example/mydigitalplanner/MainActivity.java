@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.commit();
                                 Log.d("MainActivity", "signinUserWithEmail:success");
                                 Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                                Intent si = new Intent(MainActivity.this,Loginok.class);
+                                Intent si = new Intent(MainActivity.this,LogInOk.class);
                                 si.putExtra("newuser",false);
                                 startActivity(si);
                             } else {
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                 User u=new User(name,email, phone,uid,true);
                                 refDB.child(uid).setValue(u);
                                 Toast.makeText(MainActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
-                                Intent si = new Intent(MainActivity.this,Loginok.class);
+                                Intent si = new Intent(MainActivity.this,LogInOk.class);
                                 si.putExtra("newuser",true);
                                 startActivity(si);
                             } else {
@@ -207,4 +207,5 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
 }
