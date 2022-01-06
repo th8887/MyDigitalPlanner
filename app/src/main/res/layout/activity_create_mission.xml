@@ -42,6 +42,220 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="70"
+                android:ems="10"
+                android:hint="title"
+                android:inputType="textPersonName" />
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="20" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="55"
+                android:ems="10"
+                android:hint="openDate"
+                android:inputType="date" />
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:ems="10"
+                android:hint="time"
+                android:inputType="time" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="55"
+                android:ems="10"
+                android:hint="dueDate"
+                android:inputType="date" />
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:ems="10"
+                android:hint="time"
+                android:inputType="time" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation='horizontal'>
+
+            <RadioGroup
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="29"
+                    android:text="important" />
+
+                <RadioButton
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="34"
+                    android:text="less important" />
+
+                <RadioButton
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_weight="37"
+                    android:text="not important" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="50" />
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="10" />
+
+            <Button
+                android:id="@+id/cc"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:text="create category" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:ems="10"
+                android:hint="description"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="9"
+            android:orientation="horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="100">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="16dp"
+                android:src="@android:drawable/ic_input_add"
+                app:fabSize="mini" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
             android:layout_weight="5" />
 
     </LinearLayout>
