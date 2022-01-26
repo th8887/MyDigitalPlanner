@@ -41,15 +41,20 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="name:"
             android:autoSizeTextType="uniform"
+            android:text="name:"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tVnameview"
+
+        <EditText
+            android:id="@+id/nameu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="name"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"
@@ -64,11 +69,14 @@
             android:autoSizeTextType="uniform"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tVemailview"
+        <EditText
+            android:id="@+id/emailu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
 
         <Space
             android:layout_width="match_parent"
@@ -83,15 +91,39 @@
             android:autoSizeTextType="uniform"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tVuidview"
+        <EditText
+            android:id="@+id/uidu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:text="Phone:"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/phoneu"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="name"
+            android:inputType="textPersonName" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
             android:layout_weight="0.5" />
 
         <CheckBox

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <Space
         android:layout_width="wrap_content"
@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <Space
@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="10"
             android:text="Create Category"
             android:textAlignment="center"
@@ -30,13 +30,13 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="5" />
 
         <EditText
             android:id="@+id/nameC"
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="17"
             android:ems="10"
             android:hint="name of category"
@@ -44,36 +44,36 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="5" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="8"
             android:orientation="horizontal">
 
             <Space
                 android:layout_width="0px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="60" />
 
             <Button
                 android:id="@+id/add"
                 android:layout_width="0px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="30"
                 android:text="create" />
 
             <Space
                 android:layout_width="0px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="10" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="50" />
 
     </LinearLayout>

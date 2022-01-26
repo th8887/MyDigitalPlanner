@@ -81,12 +81,14 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/openDate"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="55"
                 android:ems="10"
                 android:hint="openDate"
-                android:inputType="date" />
+                android:inputType="date"
+                android:onClick="openDate" />
 
             <Space
                 android:layout_width="0px"
@@ -94,11 +96,13 @@
                 android:layout_weight="5" />
 
             <EditText
+                android:id="@+id/timeOpen"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:ems="10"
                 android:hint="time"
+                android:onClick="timeopen"
                 android:inputType="time" />
 
         </LinearLayout>
@@ -115,11 +119,13 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/dueDate"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="55"
                 android:ems="10"
                 android:hint="dueDate"
+                android:onClick="dueDate"
                 android:inputType="date" />
 
             <Space
@@ -128,11 +134,13 @@
                 android:layout_weight="5" />
 
             <EditText
+                android:id="@+id/timeDue"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:ems="10"
                 android:hint="time"
+                android:onClick="timedue"
                 android:inputType="time" />
 
         </LinearLayout>

@@ -24,6 +24,9 @@ public class Mission {
         this.images=images;
     }
 
+    public Mission(){
+    }
+
     public void setCategory(int category) {
         this.category = category;
     }

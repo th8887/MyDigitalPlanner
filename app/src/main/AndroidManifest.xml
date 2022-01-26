@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDigitalPlanner">
         <activity
+            android:name=".Calendar"
+            android:exported="false" />
+        <activity
             android:name=".LogInOk"
             android:exported="false" />
         <activity
             android:name=".CreateMission"
-            android:exported="false" />
-        <activity
-            android:name=".userInfo"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
