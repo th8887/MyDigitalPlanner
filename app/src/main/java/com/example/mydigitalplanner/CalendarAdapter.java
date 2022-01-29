@@ -1,5 +1,6 @@
 package com.example.mydigitalplanner;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
 
         holder.dayOfMonth.setText(daysOfMonth.get(position));
-
     }
 
     @Override

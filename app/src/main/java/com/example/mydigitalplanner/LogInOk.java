@@ -109,7 +109,7 @@ public class LogInOk extends AppCompatActivity {
         SharedPreferences.Editor editor=settings.edit();
         editor.putBoolean("stayConnect",cBconnectview.isChecked());
         editor.commit();
-        Intent si= new Intent(LogInOk.this,CreateMission.class);
+        Intent si= new Intent(LogInOk.this,MainActivity.class);
         startActivity(si);
         finish();
     }

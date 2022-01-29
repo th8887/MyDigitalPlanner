@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateMission">
+    tools:context=".DailyCalendar">
 
     <Space
         android:layout_width="0px"
@@ -20,7 +20,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="2" />
+            android:layout_weight="5" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +56,6 @@
                 android:layout_weight="10" />
 
             <EditText
-                android:id="@+id/title"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="70"
@@ -81,7 +80,7 @@
             android:layout_weight="5"
             android:orientation="horizontal">
 
-            <TextView
+            <EditText
                 android:id="@+id/openDate"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
@@ -89,15 +88,14 @@
                 android:ems="10"
                 android:hint="openDate"
                 android:inputType="date"
-                android:onClick="openDate"
-                android:textAlignment="center"/>
+                android:onClick="openDate" />
 
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
 
-            <TextView
+            <EditText
                 android:id="@+id/timeOpen"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
@@ -105,8 +103,7 @@
                 android:ems="10"
                 android:hint="time"
                 android:onClick="timeopen"
-                android:inputType="time"
-                android:textAlignment="center"/>
+                android:inputType="time" />
 
         </LinearLayout>
 
@@ -121,7 +118,7 @@
             android:layout_weight="5"
             android:orientation="horizontal">
 
-            <TextView
+            <EditText
                 android:id="@+id/dueDate"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
@@ -129,65 +126,23 @@
                 android:ems="10"
                 android:hint="dueDate"
                 android:onClick="dueDate"
-                android:inputType="date"
-                android:textAlignment="center"/>
+                android:inputType="date" />
 
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
 
-            <TextView
+            <EditText
                 android:id="@+id/timeDue"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:ems="10"
                 android:hint="time"
-                android:inputType="time"
                 android:onClick="timedue"
-                android:textAlignment="center" />
+                android:inputType="time" />
 
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation='horizontal'>
-
-            <RadioGroup
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="100"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/i0"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="29"
-                    android:text="important" />
-
-                <RadioButton
-                    android:id="@+id/i1"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="34"
-                    android:text="less important" />
-
-                <RadioButton
-                    android:id="@+id/i2"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="37"
-                    android:text="not important" />
-            </RadioGroup>
         </LinearLayout>
 
         <Space
@@ -202,7 +157,6 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/catS"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="50" />
@@ -213,11 +167,12 @@
                 android:layout_weight="10" />
 
             <Button
+                android:id="@+id/cc"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:text="create category"
-                android:onClick="showCustomDialog"/>
+                android:onClick="cc"/>
         </LinearLayout>
 
         <Space
@@ -232,7 +187,6 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/des"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="100"
@@ -247,40 +201,12 @@
             android:layout_height="0dp"
             android:layout_weight="2" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="9"
+            android:layout_weight="5"
             android:orientation="horizontal">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="100">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="16dp"
-                android:src="@android:drawable/ic_input_add"
-                app:fabSize="mini" />
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="2" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:orientation="horizontal"
-            android:layout_weight="5">
 
             <Space
                 android:layout_width="0px"
@@ -291,9 +217,8 @@
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
-                android:text="save mission"
-                android:onClick="saveMission"
-                android:textSize="12sp" />
+                android:text="save event"
+                android:onClick="saveEvent"/>
 
             <Space
                 android:layout_width="0px"
@@ -304,7 +229,7 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="2" />
+            android:layout_weight="5" />
 
     </LinearLayout>
 

@@ -4,15 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_calendar.xml" value="0.1" />
+        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_camera_or_gallery.xml" value="0.1358695652173913" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_create.xml" value="0.1" />
-        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_create_mission.xml" value="0.16666666666666666" />
+        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_create_mission.xml" value="0.16354166666666667" />
+        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_daily_calendar.xml" value="0.14402173913043478" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_log_in_ok.xml" value="0.1" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/activity_user_info.xml" value="0.22" />
-        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/calendar_cell.xml" value="0.15729166666666666" />
+        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/calendar_cell.xml" value="0.14402173913043478" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/create_category.xml" value="0.22" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/menu/main.xml" value="0.1" />
+        <entry key="..\:/Android/Projects/MyDigitalPlanner/app/src/main/res/xml/file_paths.xml" value="0.13134057971014493" />
       </map>
     </option>
   </component>

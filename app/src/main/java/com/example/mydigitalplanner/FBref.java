@@ -3,12 +3,17 @@ package com.example.mydigitalplanner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class FBref {
     public static FirebaseAuth reAuth= FirebaseAuth.getInstance();
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static DatabaseReference refDB = database.getReference("Users");
-    public static DatabaseReference refDB1 = database.getReference("message");
+    public static DatabaseReference refDBM= database.getReference("Mission");
+
+    public static FirebaseStorage storage= FirebaseStorage.getInstance();;
+    public static StorageReference storageReference=storage.getReference();;
 
 }

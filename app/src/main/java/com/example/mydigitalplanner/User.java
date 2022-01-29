@@ -16,7 +16,8 @@ public class User {
         this.uID= uID;
         this.email= e;
         this.active= active;
-        this.category= new ArrayList<String>();
+        this.category= new ArrayList<>();
+        category.add("Category");
     }
 
     public User(){
@@ -54,7 +55,7 @@ public class User {
         this.email = email;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 

@@ -114,9 +114,8 @@ public class Calendar extends AppCompatActivity implements CalendarAdapter.OnIte
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onItemClick(int position, String dayText) {
-        if (dayText.equals("")){
-            String message= "Selected Date"+ dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        if (!dayText.equals("")){
+            startActivity(new Intent(this, DailyCalendar.class));
         }
     }
 
