@@ -76,6 +76,8 @@ public class CustomAdapter extends BaseAdapter {
         if (cb.isChecked()){
             Mission m1= m.get(i);
             m1.setActive(false);
+
+
         }
 
         return view;
