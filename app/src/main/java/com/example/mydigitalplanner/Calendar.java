@@ -144,6 +144,10 @@ public class Calendar extends AppCompatActivity implements CalendarAdapter.OnIte
             case R.id.page4:
                 Toast.makeText(this, "You're already here!", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.page5:
+                i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
         }
         return true;
     }

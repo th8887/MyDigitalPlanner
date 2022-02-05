@@ -3,10 +3,14 @@ package com.example.mydigitalplanner;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.mydigitalplanner.FBref.reAuth;
 import static com.example.mydigitalplanner.FBref.refDB;
+import static com.example.mydigitalplanner.FBref.refDBM;
+import static com.example.mydigitalplanner.FBref.refDBUC;
+import static com.example.mydigitalplanner.FBref.storageReference;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -14,9 +18,13 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +35,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,16 +55,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-//לסדר את המסך שלו!!!
-//לבדוק למה מציג את השעה בדיליי
-public class CreateMission extends AppCompatActivity  implements TimePickerDialog.OnTimeSetListener, AdapterView.OnItemSelectedListener {
-    TextView openDate,dueDate, timeOpen, timeDue;
-    EditText t, des;
+//fix dialog with pictures.
+public class CreateMission extends AppCompatActivity  implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+    EditText t, des, start, end;
     Spinner catS;
-    RadioButton v;
+    ListView links;
+    RadioButton i0, i1, i2;
+    RadioGroup iGroup;
     /**
      * a plus to add links for pictures.
      */
@@ -81,8 +100,13 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
      */
     int category;
     int importance;
-    String title, description, oD, dD,oT, dT;
+    String title, description, s, e;
     ArrayList<String> images= new ArrayList<String>();
+    /**
+     * if the user went to another activity to upload a picture- true
+     * else- false
+     */
+    boolean status= false;
 
     /**
      * for the time picker.
@@ -92,6 +116,10 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
      * Adapter for the spinner.
      */
     ArrayAdapter<String> adp;
+    /**
+     * Adapter for listview- for the links of the images.
+     */
+    ArrayAdapter<String> adpLinks;
 
     public static DatePickerDialog.OnDateSetListener mDataSetListener;
 
@@ -100,13 +128,21 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mission);
         fab = findViewById(R.id.fab);
-        openDate=(TextView)findViewById(R.id.openDate);
-        dueDate=(TextView) findViewById(R.id.dueDate);
-        timeOpen=(TextView) findViewById(R.id.timeOpen);
-        timeDue=(TextView) findViewById(R.id.timeDue);
         t=(EditText) findViewById(R.id.title);
         des=(EditText) findViewById(R.id.des);
         catS=(Spinner) findViewById(R.id.catS);
+        links=(ListView) findViewById(R.id.links);
+        start=(EditText) findViewById(R.id.start);
+        end=(EditText) findViewById(R.id.end);
+
+        i0=(RadioButton) findViewById(R.id.i0);
+        i1=(RadioButton) findViewById(R.id.i1);
+        i2=(RadioButton) findViewById(R.id.i2);
+        iGroup=(RadioGroup) findViewById(R.id.iGroup);
+
+        links.setOnItemSelectedListener(this);
+
+        links.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 
 
@@ -115,7 +151,6 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
             public void onClick(View view) {
                 startActivity(new Intent(CreateMission.this, Camera_or_Gallery.class));
 
-                //images.add();
             }
         });
 
@@ -126,6 +161,8 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
         uid = fbuser.getUid();
         Query q = refDB.orderByChild("uID").equalTo(uid);
         q.addListenerForSingleValueEvent(VEL);
+
+        images.add("images->");
     }
 
     ValueEventListener VEL = new ValueEventListener() {
@@ -155,15 +192,87 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
         }
     };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent getI= getIntent();
+        status=getI.getBooleanExtra("status",false);
+        if(status){
+            images.add(getI.getStringExtra("way"));
+        }
+
+        adpLinks= new ArrayAdapter<String>(this,
+                R.layout.support_simple_spinner_dropdown_item, images);
+        links.setAdapter(adpLinks);
+    }
+
+    public void startM(View view) {
+         showDateTimeDialog(start);
+    }
+
+    public void endM(View view) {
+        showDateTimeDialog(end);
+    }
+
+
     /**
-     * OnClick for the button "create category"- creates a new category and adds it to Firebase Database.
-     * To Display the custom dialog.
-     * inside the function:
-     * 1. defines the dialog and whats inside it.
-     * 2. reads the information from Firebase and then updates the ArrayList category.
-     * 3. closes the dialog.
+     * creates a date picker and a time picker at the same time.
+     * saves more space and easier to collect the information that way.
+     *
+     * @param date_time_in
      */
-    public void showCustomDialog(View view){
+    public void showDateTimeDialog(final EditText date_time_in) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        calendar.set(Calendar.MINUTE,minute);
+
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+
+                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+
+                new TimePickerDialog(CreateMission.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            }
+        };
+
+        new DatePickerDialog(CreateMission.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+    /**
+     * if the adbLinks is selected- it will show a dialog that will show the image that the user chose.
+     * if adb is selected- if will collect the number of the category the user chose.
+     * @param parent
+     * @param v
+     * @param pos
+     * @param rowid
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int pos, long rowid)
+    {
+        category= pos+1;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {}
+
+    /**
+     * the user can add a category to the mission.
+     * @param view
+     */
+    public void showCustomDialog(View view) {
         final Dialog dialog = new Dialog(CreateMission.this);
         //We have added a title in the custom layout. So let's disable the default title.
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -200,95 +309,6 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
         dialog.show();
     }
 
-
-    /**
-     * TimePicker of the open date of a mission.
-     * @param view
-     */
-    public void openDate(View view) {
-        date(openDate);
-    }
-
-    /**
-     * TimePicker for the finish day of the mission
-     * @param view
-     */
-    public void dueDate(View view) {
-        date(dueDate);
-    }
-
-    /**
-     * TimePicker for the start time of the mission.
-     * @param view
-     */
-    public void timeopen(View view) {
-        time(timeOpen);
-    }
-
-    /**
-     * TimePIcker for the finish time of the mission.
-     * @param view
-     */
-
-    public void timedue(View view) {
-        time(timeDue);
-    }
-    /**
-     * In order to not make things twice, creates the DatePicker for each EditText.
-     * @param o- the EditText that the info will go to.
-     */
-    public void date(TextView o){
-        Calendar cal= Calendar.getInstance();
-        int year= cal.get(Calendar.YEAR);
-        int month= cal.get(Calendar.MONTH);
-        int day= cal.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dialog= new DatePickerDialog(
-                CreateMission.this,
-                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                mDataSetListener,
-                year,month, day);
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        mDataSetListener= new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month= month+1;
-                //Log.d(TAG,"OnDateSet : dd/mm/yyyy "+ day +"/"+ month +"/"+ year);
-                String date= day+"/"+month+"/"+year;
-                o.setText(date);
-            }
-        };
-    }
-
-    /**
-     * In order to not make things twice, creates the TimePicker for each EditText.
-     * @param t- the EditText that the info will go to.
-     */
-    public void time(TextView t){
-        DialogFragment timePicker = new TimePickerFragment();
-        timePicker.show(getSupportFragmentManager(), "time picker");
-        t.setText(hour+":"+min);
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        hour=hourOfDay;
-        min=minute;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View v, int pos, long rowid)
-    {
-        category= pos;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-    }
-
     /**
      * Saves the mission into Firebase Database according to users ID and
      * completed/ uncompleted missions.
@@ -301,17 +321,33 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
         }
         else{
             title= t.getText().toString();
-            oD= openDate.getText().toString();
-            dD= dueDate.getText().toString();
             description= des.getText().toString();
-            oT= timeOpen.getText().toString();
-            dT= timeDue.getText().toString();
-            switch (v.getId()){
-                case R.id.i0: importance=0; break;
-                case R.id.i1: importance=1; break;
-                case R.id.i2: importance=2; break;
+            s= start.getText().toString();
+            e= end.getText().toString();
+
+            if(i0.isChecked()){
+                importance=0;
+            }
+            if(i1.isChecked()){
+                importance=1;
+            }
+            if (i2.isChecked()){
+                importance=2;
             }
 
+            Mission m= new Mission(title, importance, description, s, e, category, images);
+            refDBUC.child(title).setValue(m);
+
+            t.setText(" ");
+
+            iGroup.clearCheck();
+            des.setText(" ");
+            start.setText(" ");
+            end.setText(" ");
+            images.clear();
+            images.add("images");
+
+            Toast.makeText(this, "Your mission has been uploaded😊", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -341,8 +377,40 @@ public class CreateMission extends AppCompatActivity  implements TimePickerDialo
                 i= new Intent(this, com.example.mydigitalplanner.Calendar.class);
                 startActivity(i);
                 break;
+            case R.id.page5:
+                i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
         }
         return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        AlertDialog.Builder adb= new AlertDialog.Builder(this);
+        adb.setMessage("selected Image");
+
+        adb.setCancelable(true);
+
+        ImageView show= new ImageView(this);
+
+        StorageReference dateRef = storageReference.child(images.get(i));
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        dateRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0,1 );
+                show.setImageBitmap(bMap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+        AlertDialog ad= adb.create();
+        ad.show();
     }
 }
 

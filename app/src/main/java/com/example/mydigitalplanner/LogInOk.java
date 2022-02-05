@@ -139,6 +139,10 @@ public class LogInOk extends AppCompatActivity {
                 i= new Intent(this, com.example.mydigitalplanner.Calendar.class);
                 startActivity(i);
                 break;
+            case R.id.page5:
+                i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
         }
         return true;
     }

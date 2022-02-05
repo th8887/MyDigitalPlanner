@@ -26,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="5"
-            android:onClick="switchTo"
             android:orientation="horizontal">
 
             <Space
@@ -49,6 +48,18 @@
                 android:layout_height="match_parent"
                 android:layout_weight="30" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="5" />
+
+        <EditText
+            android:id="@+id/titlePic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"

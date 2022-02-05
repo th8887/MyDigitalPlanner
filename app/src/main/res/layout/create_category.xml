@@ -25,7 +25,7 @@
             android:layout_weight="10"
             android:text="Create Category"
             android:textAlignment="center"
-            android:textSize="34sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <Space

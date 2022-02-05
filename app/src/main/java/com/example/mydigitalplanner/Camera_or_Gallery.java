@@ -20,6 +20,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +38,13 @@ import java.util.Date;
 
 public class Camera_or_Gallery extends AppCompatActivity {
 
+    ProgressDialog progressDialog;
     TextView title;
     /**
      * Button that switches between open camera and open gallery
      */
     Button btnS;
+    EditText titlePic;
 
     ImageView showPic;
     /**
@@ -49,9 +52,14 @@ public class Camera_or_Gallery extends AppCompatActivity {
      */
     boolean s;
     /**
+     * In case the user wants to name the file;
+     */
+    String path;
+    /**
      * for the type of the OnActivityResult
      * 1=gallery
      * 2=camera
+     * @param count- counts the pictures with the default name
      */
     int i,count=0;
 
@@ -69,6 +77,8 @@ public class Camera_or_Gallery extends AppCompatActivity {
         title=(TextView) findViewById(R.id.title);
         btnS=(Button) findViewById(R.id.btnS);
         showPic=(ImageView) findViewById(R.id.showPic);
+        titlePic=(EditText) findViewById(R.id.titlePic);
+
 
         s=true;
 
@@ -207,17 +217,27 @@ public class Camera_or_Gallery extends AppCompatActivity {
      * 1- gallery
      * 2- camera
      * @param view
+     *
+     * Intents- back to the CreateMission class:
+     * gi- gallery intent.
+     * ci- camera intent.
      */
 
     public void upload(View view) {
         switch (i){
             case 1:
                 if (filePath != null) {
-                    ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog = new ProgressDialog(Camera_or_Gallery.this);
                     progressDialog.setTitle("Uploading...");
                     progressDialog.show();
-                    StorageReference ref = storageReference.child("images/users/" +reAuth.getCurrentUser().getUid()+"/image-"+count);
+                    if(titlePic.getText().toString().equals(""))
+                        path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
+                    else
+                        path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
+
                     count++;
+                    StorageReference ref = storageReference.child(path);
+
                     ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(
@@ -241,12 +261,23 @@ public class Camera_or_Gallery extends AppCompatActivity {
                     });
                 }
 
+                Intent gi= new Intent(this, CreateMission.class);
+                gi.putExtra("way", path);
+                gi.putExtra("status",true);
+                startActivity(gi);
+                finish();
+
                 break;
             case 2:
-                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading...");
                 progressDialog.show();
-                UploadTask uploadTask = storageReference.child("images/users/" + reAuth.getCurrentUser().getUid()+"/image-"+count).putFile(photoUri);
+                if(titlePic.getText().toString().equals(""))
+                    path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
+                else
+                    path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
+
+                UploadTask uploadTask = storageReference.child(path).putFile(photoUri);
                 //StorageReference ref = mStorageRef.child("images/users/" + auth.getCurrentUser().getUid()+"-"+Gallery.count);
                 count++;
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -269,7 +300,21 @@ public class Camera_or_Gallery extends AppCompatActivity {
                     }
                 });
 
+                Intent ci= new Intent(this, CreateMission.class);
+                ci.putExtra("way",path);
+                ci.putExtra("status",true);
+                startActivity(ci);
+                finish();
+
                 break;
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( progressDialog!=null && progressDialog.isShowing() ){
+            progressDialog.cancel();
         }
     }
 }

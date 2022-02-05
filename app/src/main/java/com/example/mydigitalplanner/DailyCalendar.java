@@ -30,12 +30,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class DailyCalendar extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+public class DailyCalendar extends AppCompatActivity {
 
-    EditText openDate,dueDate, timeOpen, timeDue;
+    EditText t, des, start, end;
     /**
      * Taking the information from firebase into the object.
      */
@@ -54,10 +55,11 @@ public class DailyCalendar extends AppCompatActivity implements TimePickerDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_calendar);
 
-        openDate=(EditText)findViewById(R.id.openDate);
-        dueDate=(EditText) findViewById(R.id.dueDate);
-        timeOpen=(EditText) findViewById(R.id.timeOpen);
-        timeDue=(EditText) findViewById(R.id.timeDue);
+
+        start=(EditText) findViewById(R.id.start);
+        end=(EditText) findViewById(R.id.end);
+
+
     }
 
 
@@ -121,89 +123,51 @@ public class DailyCalendar extends AppCompatActivity implements TimePickerDialog
         }
     };
 
-    /**
-     * TimePicker of the open date of a mission.
-     * @param view
-     */
-    public void openDate(View view) {
-        date(openDate);
-    }
 
-    /**
-     * TimePicker for the finish day of the mission
-     * @param view
-     */
-    public void dueDate(View view) {
-        date(dueDate);
-    }
-
-    /**
-     * TimePicker for the start time of the mission.
-     * @param view
-     */
-    public void timeopen(View view) {
-        time(timeOpen);
-    }
-
-    /**
-     * TimePIcker for the finish time of the mission.
-     * @param view
-     */
-
-    public void timedue(View view) {
-        time(timeDue);
-    }
-    /**
-     * In order to not make things twice, creates the DatePicker for each EditText.
-     * @param o- the EditText that the info will go to.
-     */
-    public void date(EditText o){
-        java.util.Calendar cal= java.util.Calendar.getInstance();
-        int year= cal.get(java.util.Calendar.YEAR);
-        int month= cal.get(java.util.Calendar.MONTH);
-        int day= cal.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dialog= new DatePickerDialog(
-                DailyCalendar.this,
-                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                mDataSetListener,
-                year,month, day);
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        mDataSetListener= new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month= month+1;
-                Log.d(TAG,"OnDateSet : dd/mm/yyyy "+ day +"/"+ month +"/"+ year);
-                String date= day+"/"+month+"/"+year;
-                o.setText(date);
-            }
-        };
-    }
-
-    /**
-     * In order to not make things twice, creates the TimePicker for each EditText.
-     * @param t- the EditText that the info will go to.
-     */
-    public void time(EditText t){
-        DialogFragment timePicker = new TimePickerFragment();
-        timePicker.show(getSupportFragmentManager(), "time picker");
-        t.setText(hour+":"+min);
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        hour=hourOfDay;
-        min=minute;
-    }
 
     public void cc(View view) {
         showCustomDialog();
     }
 
     public void saveEvent(View view) {
+
+    }
+
+    public void startM(View view) {
+        showDateTimeDialog(start);
+    }
+
+    public void endM(View view) {
+        showDateTimeDialog(end);
+    }
+
+
+    public void showDateTimeDialog(final EditText date_time_in) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        calendar.set(Calendar.MINUTE,minute);
+
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+
+                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+
+                new TimePickerDialog(DailyCalendar.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            }
+        };
+
+        new DatePickerDialog(DailyCalendar.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 }

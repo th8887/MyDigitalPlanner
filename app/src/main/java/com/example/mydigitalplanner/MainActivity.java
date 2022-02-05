@@ -285,6 +285,10 @@ public class MainActivity extends AppCompatActivity {
                 i= new Intent(this, Calendar.class);
                 startActivity(i);
                 break;
+            case R.id.page5:
+                i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
         }
         return true;
     }

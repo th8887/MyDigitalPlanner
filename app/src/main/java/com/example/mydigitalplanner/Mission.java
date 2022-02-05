@@ -12,7 +12,7 @@ public class Mission {
     private int category;//from the index.
     private ArrayList<String> images; //links of the images.
 
-    public void Mission(String title, int importance, String description, String openDate,
+    public Mission(String title, int importance, String description, String openDate,
                         String dueDate, int category, ArrayList<String> images){
         this.title=title;
         this.importance=importance;
@@ -22,7 +22,9 @@ public class Mission {
         this.dueDate = dueDate;
         this.category = category;
         this.images=images;
+        this.active= false;
     }
+
 
     public Mission(){
     }
