@@ -13,7 +13,7 @@ public class Mission {
     private ArrayList<String> images; //links of the images.
 
     public Mission(String title, int importance, String description, String openDate,
-                        String dueDate, int category, ArrayList<String> images){
+                        String dueDate, int category){
         this.title=title;
         this.importance=importance;
         this.active= false;
@@ -21,7 +21,8 @@ public class Mission {
         this.openDate = openDate;
         this.dueDate = dueDate;
         this.category = category;
-        this.images=images;
+        this.images= new ArrayList<String>();
+        images.add("images");
         this.active= false;
     }
 
@@ -45,7 +46,7 @@ public class Mission {
         this.dueDate = dueDate;
     }
 
-    public void setImages(ArrayList<String> images) {
+    public void setimages(ArrayList<String> images) {
         this.images = images;
     }
 
@@ -88,6 +89,8 @@ public class Mission {
     public int getCategory() {
         return category;
     }
+
+    public ArrayList<String> getImages(){return images;}
 
     @Override
     public String toString() {

@@ -115,6 +115,7 @@
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="29"
+                    android:onClick="i0"
                     android:text="important" />
 
                 <RadioButton
@@ -122,6 +123,7 @@
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="34"
+                    android:onClick="i1"
                     android:text="less important" />
 
                 <RadioButton
@@ -129,6 +131,7 @@
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:layout_weight="37"
+                    android:onClick="i2"
                     android:text="not important" />
             </RadioGroup>
         </LinearLayout>

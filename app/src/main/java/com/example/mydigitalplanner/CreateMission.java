@@ -18,10 +18,12 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.util.Output;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -58,16 +60,29 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 //fix dialog with pictures.
+// TextView for dates!!
+// OnResume() that will save the information.
+//לעשות בדיקה - אם אין מידע אין מה לשמור
+//לעשות onClick לכל כפתור של דחיפות מטלה!
 public class CreateMission extends AppCompatActivity  implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
-    EditText t, des, start, end;
+    EditText t, des;
+    TextView start, end;
     Spinner catS;
     ListView links;
-    RadioButton i0, i1, i2;
+    RadioButton i0,i1,i2;
     RadioGroup iGroup;
     /**
      * a plus to add links for pictures.
@@ -132,12 +147,14 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         des=(EditText) findViewById(R.id.des);
         catS=(Spinner) findViewById(R.id.catS);
         links=(ListView) findViewById(R.id.links);
-        start=(EditText) findViewById(R.id.start);
-        end=(EditText) findViewById(R.id.end);
 
         i0=(RadioButton) findViewById(R.id.i0);
         i1=(RadioButton) findViewById(R.id.i1);
-        i2=(RadioButton) findViewById(R.id.i2);
+        i2= (RadioButton) findViewById(R.id.i2);
+
+        start=(TextView) findViewById(R.id.start);
+        end=(TextView) findViewById(R.id.end);
+
         iGroup=(RadioGroup) findViewById(R.id.iGroup);
 
         links.setOnItemSelectedListener(this);
@@ -150,6 +167,16 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CreateMission.this, Camera_or_Gallery.class));
+                SharedPreferences setting = getSharedPreferences("missionInfo", MODE_PRIVATE);
+                SharedPreferences.Editor editor = setting.edit();
+
+                editor.putString("title", t.getText().toString());
+                editor.putString("start", start.getText().toString());
+                editor.putString("end", end.getText().toString());
+                editor.putInt("importance", importance);
+                editor.putInt("category", category);
+                editor.putString("description", des.getText().toString());
+                editor.commit();
 
             }
         });
@@ -200,6 +227,18 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         status=getI.getBooleanExtra("status",false);
         if(status){
             images.add(getI.getStringExtra("way"));
+
+            SharedPreferences settings= getSharedPreferences("missionInfo", MODE_PRIVATE);
+            t.setText(settings.getString("title", "a"));
+            start.setText(settings.getString("start", "s"));
+            end.setText(settings.getString("end","e"));
+            switch (settings.getInt("importance", 3)){
+                case 0: i0.setChecked(true);break;
+                case 1: i1.setChecked(true); break;
+                case 2: i2.setChecked(true); break;
+            }
+            catS.setSelection(settings.getInt("category", 0));
+            des.setText(settings.getString("description","fff"));
         }
 
         adpLinks= new ArrayAdapter<String>(this,
@@ -222,7 +261,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
      *
      * @param date_time_in
      */
-    public void showDateTimeDialog(final EditText date_time_in) {
+    public void showDateTimeDialog(final TextView date_time_in) {
         final Calendar calendar=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -262,7 +301,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int pos, long rowid)
     {
-        category= pos+1;
+        category= pos;
     }
 
     @Override
@@ -325,21 +364,13 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
             s= start.getText().toString();
             e= end.getText().toString();
 
-            if(i0.isChecked()){
-                importance=0;
-            }
-            if(i1.isChecked()){
-                importance=1;
-            }
-            if (i2.isChecked()){
-                importance=2;
-            }
 
-            Mission m= new Mission(title, importance, description, s, e, category, images);
+            Mission m= new Mission(title, importance, description, s, e, category);
+            m.setimages(images);
             refDBUC.child(title).setValue(m);
 
             t.setText(" ");
-
+            catS.setSelection(0);
             iGroup.clearCheck();
             des.setText(" ");
             start.setText(" ");
@@ -400,7 +431,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         dateRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0,1 );
+                Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0,bytes.length );
                 show.setImageBitmap(bMap);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -411,6 +442,18 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         });
         AlertDialog ad= adb.create();
         ad.show();
+    }
+
+    public void i0(View view) {
+        importance=0;
+    }
+
+    public void i1(View view) {
+        importance=1;
+    }
+
+    public void i2(View view) {
+        importance=2;
     }
 }
 
