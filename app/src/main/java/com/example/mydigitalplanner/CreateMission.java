@@ -166,7 +166,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CreateMission.this, Camera_or_Gallery.class));
+
                 SharedPreferences setting = getSharedPreferences("missionInfo", MODE_PRIVATE);
                 SharedPreferences.Editor editor = setting.edit();
 
@@ -178,6 +178,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
                 editor.putString("description", des.getText().toString());
                 editor.commit();
 
+                startActivity(new Intent(CreateMission.this, Camera_or_Gallery.class));
             }
         });
 
@@ -206,6 +207,10 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
                     email= user.getEmail();
                     a= user.getActive();
                 }
+
+                if (c.isEmpty()){
+                    c.add("category->");
+                }
                 adp = new ArrayAdapter<String>(CreateMission.this,
                         R.layout.support_simple_spinner_dropdown_item,
                         c);
@@ -219,6 +224,15 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         }
     };
 
+    /**
+     * the intent gets a check from Camera_or_gallery activity and from CheckList activity in order to know the
+     * difference between them(from checkList activity it needs to brings and images Arraylist that was in the mission for a update.
+     *
+     * (90% of the code is the same except the images ArrayList part.)
+     *
+     * check=0 -> the user got back from Camera_or_Gallery Activity
+     * check=1-> the user got back to update a mission from CheckList Activity
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -226,7 +240,9 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         Intent getI= getIntent();
         status=getI.getBooleanExtra("status",false);
         if(status){
-            images.add(getI.getStringExtra("way"));
+            if(!images.contains(getI.getStringExtra("way"))){
+                images.add(getI.getStringExtra("way"));
+            }
 
             SharedPreferences settings= getSharedPreferences("missionInfo", MODE_PRIVATE);
             t.setText(settings.getString("title", "a"));
@@ -237,8 +253,13 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
                 case 1: i1.setChecked(true); break;
                 case 2: i2.setChecked(true); break;
             }
-            catS.setSelection(settings.getInt("category", 0));
+            int n = settings.getInt("category", -1);
+            catS.setSelection(n,true);
             des.setText(settings.getString("description","fff"));
+
+            if(getI.getIntExtra("check", 3)== 1){
+                images= getI.getStringArrayListExtra("images");
+            }
         }
 
         adpLinks= new ArrayAdapter<String>(this,
@@ -246,10 +267,18 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         links.setAdapter(adpLinks);
     }
 
+    /**
+     * lets te user pick date and time for the beginning of the mission
+     * @param view
+     */
     public void startM(View view) {
          showDateTimeDialog(start);
     }
 
+    /**
+     * lets the user pick the date and time for the ending of the mission.
+     * @param view
+     */
     public void endM(View view) {
         showDateTimeDialog(end);
     }
@@ -291,8 +320,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
     }
 
     /**
-     * if the adbLinks is selected- it will show a dialog that will show the image that the user chose.
-     * if adb is selected- if will collect the number of the category the user chose.
+     *  collects the number of the category the user chose.
      * @param parent
      * @param v
      * @param pos
@@ -301,7 +329,10 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int pos, long rowid)
     {
-        category= pos;
+        if(!(category!=0)){
+            category= pos;
+        }
+
     }
 
     @Override
@@ -347,6 +378,55 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
 
         dialog.show();
     }
+
+
+    /**
+     * shows the image for the user in a dialog.
+     * @param adapterView
+     * @param view
+     * @param i
+     * @param l
+     */
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        AlertDialog.Builder adb= new AlertDialog.Builder(this);
+        adb.setMessage("selected Image");
+
+        adb.setCancelable(true);
+
+        ImageView show= new ImageView(this);
+
+        StorageReference dateRef = storageReference.child("gs://mydigitalplanner-79d94.appspot.com/"+images.get(i));
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        dateRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0,bytes.length );
+                show.setImageBitmap(bMap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+        AlertDialog ad= adb.create();
+        ad.show();
+    }
+
+    public void i0(View view) {
+        importance=0;
+    }
+
+    public void i1(View view) {
+        importance=1;
+    }
+
+    public void i2(View view) {
+        importance=2;
+    }
+
 
     /**
      * Saves the mission into Firebase Database according to users ID and
@@ -414,46 +494,6 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        AlertDialog.Builder adb= new AlertDialog.Builder(this);
-        adb.setMessage("selected Image");
-
-        adb.setCancelable(true);
-
-        ImageView show= new ImageView(this);
-
-        StorageReference dateRef = storageReference.child(images.get(i));
-
-        final long ONE_MEGABYTE = 1024 * 1024;
-        dateRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0,bytes.length );
-                show.setImageBitmap(bMap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-        AlertDialog ad= adb.create();
-        ad.show();
-    }
-
-    public void i0(View view) {
-        importance=0;
-    }
-
-    public void i1(View view) {
-        importance=1;
-    }
-
-    public void i2(View view) {
-        importance=2;
     }
 }
 

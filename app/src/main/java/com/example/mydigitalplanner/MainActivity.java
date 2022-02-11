@@ -237,6 +237,12 @@ public class MainActivity extends AppCompatActivity {
                                         SharedPreferences.Editor editor=settings.edit();
                                         editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                         editor.commit();
+
+                                        SharedPreferences setting01 = getSharedPreferences("count", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor01 = setting01.edit();
+                                        editor01.putInt("count", 0);
+                                        editor01.commit();
+
                                         Log.d("MainActivity", "createUserWithEmail:success");
                                         User u= new User(name,email,phone, reAuth.getUid(),cBstayconnect.isChecked());
                                         refDB.child(reAuth.getUid()).setValue(u);

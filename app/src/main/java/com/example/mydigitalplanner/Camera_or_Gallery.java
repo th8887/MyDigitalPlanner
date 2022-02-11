@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,7 +62,8 @@ public class Camera_or_Gallery extends AppCompatActivity {
      * 2=camera
      * @param count- counts the pictures with the default name
      */
-    int i,count=0;
+    int i, count;
+
 
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
@@ -230,12 +232,21 @@ public class Camera_or_Gallery extends AppCompatActivity {
                     progressDialog = new ProgressDialog(Camera_or_Gallery.this);
                     progressDialog.setTitle("Uploading...");
                     progressDialog.show();
+                    SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
+                    count= settings.getInt("count",-1);
                     if(titlePic.getText().toString().equals(""))
+
                         path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
                     else
                         path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
-
                     count++;
+
+                    SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = setting.edit();
+                    editor.putInt("count",count);
+                    editor.commit();
+
+
                     StorageReference ref = storageReference.child(path);
 
                     ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -264,6 +275,7 @@ public class Camera_or_Gallery extends AppCompatActivity {
                 Intent gi= new Intent(this, CreateMission.class);
                 gi.putExtra("way", path);
                 gi.putExtra("status",true);
+                gi.putExtra("check",0);
                 startActivity(gi);
                 finish();
 
@@ -272,14 +284,23 @@ public class Camera_or_Gallery extends AppCompatActivity {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading...");
                 progressDialog.show();
+
+                SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
+                count= settings.getInt("count",-1);
+
                 if(titlePic.getText().toString().equals(""))
                     path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
                 else
                     path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
 
                 UploadTask uploadTask = storageReference.child(path).putFile(photoUri);
-                //StorageReference ref = mStorageRef.child("images/users/" + auth.getCurrentUser().getUid()+"-"+Gallery.count);
                 count++;
+
+                SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putInt("count",count);
+                editor.commit();
+
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -303,6 +324,7 @@ public class Camera_or_Gallery extends AppCompatActivity {
                 Intent ci= new Intent(this, CreateMission.class);
                 ci.putExtra("way",path);
                 ci.putExtra("status",true);
+                ci.putExtra("check",0);
                 startActivity(ci);
                 finish();
 
