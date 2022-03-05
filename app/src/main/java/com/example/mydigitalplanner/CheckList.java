@@ -1,5 +1,6 @@
 package com.example.mydigitalplanner;
 
+import static com.example.mydigitalplanner.FBref.reAuth;
 import static com.example.mydigitalplanner.FBref.refDBC;
 import static com.example.mydigitalplanner.FBref.refDBUC;
 
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,26 +69,25 @@ public class CheckList extends AppCompatActivity implements AdapterView.OnItemCl
 
         titles.setOnCreateContextMenuListener(this);
 
-
-        refDBUC.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dS) {
-                title_Mission.clear();
-                missions.clear();
-                for(DataSnapshot data : dS.getChildren()) {
-                    Mission mTmp = data.getValue(Mission.class);
-                    title_Mission.add(mTmp.getTitle());
-                    missions.add(mTmp);
+            refDBUC.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dS) {
+                    title_Mission.clear();
+                    missions.clear();
+                    for (DataSnapshot data : dS.getChildren()) {
+                        Mission mTmp = data.getValue(Mission.class);
+                        title_Mission.add(mTmp.getTitle());
+                        missions.add(mTmp);
+                    }
+                    ArrayAdapter<String> adp = new ArrayAdapter<String>(CheckList.this,
+                            R.layout.support_simple_spinner_dropdown_item, title_Mission);
+                    titles.setAdapter(adp);
                 }
-                ArrayAdapter <String> adp= new ArrayAdapter<String>(CheckList.this,
-                        R.layout.support_simple_spinner_dropdown_item, title_Mission);
-                titles.setAdapter(adp);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
     }
 
     @Override
@@ -137,7 +138,6 @@ public class CheckList extends AppCompatActivity implements AdapterView.OnItemCl
                     R.layout.support_simple_spinner_dropdown_item, title_Mission);
             titles.setAdapter(adp);
             Toast.makeText(this, "Works!😁", Toast.LENGTH_SHORT).show();
-
         }
 
         if(oper.equals("update mission")){
@@ -161,6 +161,7 @@ public class CheckList extends AppCompatActivity implements AdapterView.OnItemCl
 
             startActivity(si);
             finish();
+
         }
 
         if(oper.equals("cancel")){
@@ -173,5 +174,40 @@ public class CheckList extends AppCompatActivity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> par, View v, int pos, long l) {
         m= missions.get(pos);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i;
+        switch(item.getItemId()){
+            case R.id.ap:
+                i= new Intent(this, MainActivity.class);
+                startActivity(i);
+                break;
+            case R.id.ui:
+                i= new Intent(this, LogInOk.class);
+                startActivity(i);
+                break;
+            case R.id.c:
+                i= new Intent(this, Calendar.class);
+                startActivity(i);
+                break;
+            case R.id.cl:
+                Toast.makeText(this, "You are already here!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ft:
+                i= new Intent(this, Focus_Timer.class);
+                startActivity(i);
+                break;
+        }
+        return true;
     }
 }

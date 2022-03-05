@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DailyCalendar">
+    tools:context=".CreateEvent">
 
     <Space
         android:layout_width="0px"
@@ -25,14 +25,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="5"
+            android:layout_weight="10"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
-                android:text="Create A Mission:"
+                android:text="Create An Event:"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -42,23 +42,24 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="2" />
+            android:layout_weight="5" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_weight="10"
             android:orientation="horizontal">
 
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
-                android:layout_weight="10" />
+                android:layout_weight="5" />
 
             <EditText
+                android:id="@+id/t"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
-                android:layout_weight="70"
+                android:layout_weight="65"
                 android:ems="10"
                 android:hint="title"
                 android:inputType="textPersonName" />
@@ -66,100 +67,89 @@
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
-                android:layout_weight="20" />
-        </LinearLayout>
+                android:layout_weight="5" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <EditText
-            android:id="@+id/start"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="start of mission"
-            android:inputType="textPersonName"
-            android:onClick="startM" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="2" />
-
-        <EditText
-            android:id="@+id/end"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="end of mission"
-            android:inputType="textPersonName"
-            android:onClick="endM" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="50" />
+            <Switch
+                android:id="@+id/allDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:text="All Day" />
 
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
-                android:layout_weight="10" />
-
-            <Button
-                android:id="@+id/cc"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="40"
-                android:text="create category"
-                android:onClick="cc"/>
+                android:layout_weight="5" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="5" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/dateEvent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:layout_weight="10"
-            android:orientation="horizontal">
+            android:ems="10"
+            android:hint="date of event"
+            android:inputType="textPersonName"
+            android:textSize="20sp" />
 
-            <EditText
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:layout_weight="100"
-                android:ems="10"
-                android:hint="description"
-                android:inputType="textPersonName" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="5" />
+        <TextView
+            android:id="@+id/timeEvent"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="10"
+            android:ems="10"
+            android:hint="time of event"
+            android:inputType="textPersonName"
+            android:onClick="dateEvent"
+            android:textSize="20sp" />
 
-        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="5" />
+
+        <EditText
+            android:id="@+id/locEvent"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="10"
+            android:ems="10"
+            android:hint="location"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="5" />
+
+        <EditText
+            android:id="@+id/desEvent"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="10"
+            android:ems="10"
+            android:hint="description"
+            android:inputType="textPersonName" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="5"
+            android:layout_weight="10"
             android:orientation="horizontal">
 
             <Space
@@ -171,8 +161,8 @@
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
-                android:text="save event"
-                android:onClick="saveEvent"/>
+                android:onClick="saveEvent"
+                android:text="save event" />
 
             <Space
                 android:layout_width="0px"

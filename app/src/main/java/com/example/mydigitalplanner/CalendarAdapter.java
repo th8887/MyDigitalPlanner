@@ -1,50 +1,81 @@
 package com.example.mydigitalplanner;
 
-import android.annotation.SuppressLint;
+import static com.example.mydigitalplanner.CalendarUtils.selectedDate;
+
+import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
-    private final OnItemListener onItemListener;
+    private final ArrayList<LocalDate> days;
+    private final OnItemClickListener mOnItenClickListener;
 
-    private final ArrayList<String> daysOfMonth;
-
-    public CalendarAdapter( ArrayList<String> daysOfMonth, OnItemListener onItemListener) {
-        this.onItemListener = onItemListener;
-        this.daysOfMonth = daysOfMonth;
+    /**
+     * An adapter for the custom calendar
+     * @param daysOfMonth
+     * @param mOnItenClickListener
+     */
+    public CalendarAdapter(ArrayList<LocalDate> daysOfMonth, OnItemClickListener mOnItenClickListener) {
+        this.days = daysOfMonth;
+        this.mOnItenClickListener = mOnItenClickListener;
     }
 
+    /**
+     * creates the cells for each view- for the monthly view and for the weekly view
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater i = LayoutInflater.from(parent.getContext());
+        View v = i.inflate(R.layout.calendar_cell, parent, false);
+        ViewGroup.LayoutParams lp = v.getLayoutParams();
+        if(days.size()>15){//for a month
+            lp.height = (int) (parent.getHeight()*0.1666666);
+        }
+        else//for a week
+            lp.height = (int) (parent.getHeight());
 
-        LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-        View view= inflater.inflate(R.layout.calendar_cell,parent, false);
-        ViewGroup.LayoutParams layoutParams=view.getLayoutParams();
-        layoutParams.height= (int) (parent.getHeight() * 0.166666666);
-
-        return new CalendarViewHolder(view, onItemListener);
+        return new CalendarViewHolder(v, days, mOnItenClickListener);
     }
 
+    /**
+     * @des puts the dates(the number of each date) in its cells.
+     * @param holder
+     * @param position
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
-
-        holder.dayOfMonth.setText(daysOfMonth.get(position));
+        LocalDate date = days.get(position);
+        if (date == null)//for the month- the blank spaces
+            holder.dayOfMonth.setText("");
+        else {//for the month and the week: the right dates in the month and the
+            holder.dayOfMonth.setText(String.valueOf(date.getDayOfMonth()));
+            if (date.isEqual(selectedDate)){
+                holder.colorCell.setBackgroundColor(Color.LTGRAY);
+            }
+        }
     }
 
     @Override
     public int getItemCount() {
-        return daysOfMonth.size();
+        return days.size();
     }
 
-    public interface OnItemListener{
-        void onItemClick(int position, String dayText);
+    public interface OnItemClickListener{
+        void onItemClick(int pos, LocalDate date);
     }
 }

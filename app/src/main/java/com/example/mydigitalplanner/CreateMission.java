@@ -3,30 +3,21 @@ package com.example.mydigitalplanner;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.mydigitalplanner.FBref.reAuth;
 import static com.example.mydigitalplanner.FBref.refDB;
-import static com.example.mydigitalplanner.FBref.refDBM;
 import static com.example.mydigitalplanner.FBref.refDBUC;
 import static com.example.mydigitalplanner.FBref.storageReference;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.icu.util.Output;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,33 +33,20 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,6 +75,12 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
      */
     String uid,n;
     /**
+     * the user comes back to this activity from to different activities:
+     * 1.Camera_or_Gallery- check = 0
+     * 2.CheckList-> check= 1;
+     */
+    int check;
+    /**
      * Strings, boolean and arrayList for the update user.
      */
     String name, phone, uID, email;
@@ -114,7 +98,10 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
      *          2-not important
      */
     int category;
-    int importance;
+    /**
+     * for a check in when the user goes between activities and he didn't press any importance "RadioButtons"
+     */
+    int importance=3;
     String title, description, s, e;
     ArrayList<String> images= new ArrayList<String>();
     /**
@@ -143,7 +130,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mission);
         fab = findViewById(R.id.fab);
-        t=(EditText) findViewById(R.id.title);
+        t=(EditText) findViewById(R.id.t);
         des=(EditText) findViewById(R.id.des);
         catS=(Spinner) findViewById(R.id.catS);
         links=(ListView) findViewById(R.id.links);
@@ -152,8 +139,8 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
         i1=(RadioButton) findViewById(R.id.i1);
         i2= (RadioButton) findViewById(R.id.i2);
 
-        start=(TextView) findViewById(R.id.start);
-        end=(TextView) findViewById(R.id.end);
+        start=(TextView) findViewById(R.id.dateEvent);
+        end=(TextView) findViewById(R.id.EndEvent);
 
         iGroup=(RadioGroup) findViewById(R.id.iGroup);
 
@@ -173,6 +160,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
                 editor.putString("title", t.getText().toString());
                 editor.putString("start", start.getText().toString());
                 editor.putString("end", end.getText().toString());
+
                 editor.putInt("importance", importance);
                 editor.putInt("category", category);
                 editor.putString("description", des.getText().toString());
@@ -239,6 +227,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
 
         Intent getI= getIntent();
         status=getI.getBooleanExtra("status",false);
+        check= getI.getIntExtra("check", 3);
         if(status){
             if(!images.contains(getI.getStringExtra("way"))){
                 images.add(getI.getStringExtra("way"));
@@ -248,16 +237,17 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
             t.setText(settings.getString("title", "a"));
             start.setText(settings.getString("start", "s"));
             end.setText(settings.getString("end","e"));
-            switch (settings.getInt("importance", 3)){
+            switch (settings.getInt("importance", -1)){
                 case 0: i0.setChecked(true);break;
                 case 1: i1.setChecked(true); break;
                 case 2: i2.setChecked(true); break;
+                case 3: iGroup.clearCheck(); break;
             }
             int n = settings.getInt("category", -1);
             catS.setSelection(n,true);
             des.setText(settings.getString("description","fff"));
 
-            if(getI.getIntExtra("check", 3)== 1){
+            if(check == 1){
                 images= getI.getStringArrayListExtra("images");
             }
         }
@@ -435,6 +425,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
      */
     public void saveMission(View view)
     {
+
         if(t.getText().equals(null)){
             Toast.makeText(CreateMission.this, "You must have a title", Toast.LENGTH_SHORT).show();
         }
@@ -445,8 +436,15 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
             e= end.getText().toString();
 
 
+
             Mission m= new Mission(title, importance, description, s, e, category);
             m.setimages(images);
+            if(check == 1){
+                SharedPreferences settings= getSharedPreferences("missionInfo", MODE_PRIVATE);
+                if(title!=settings.getString("title", "a")){
+                    refDBUC.child(settings.getString("title", "a")).removeValue();
+                }
+            }
             refDBUC.child(title).setValue(m);
 
             t.setText(" ");
@@ -460,6 +458,7 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
 
             Toast.makeText(this, "Your mission has been uploaded😊", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
@@ -473,23 +472,24 @@ public class CreateMission extends AppCompatActivity  implements AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item){
         Intent i;
         switch(item.getItemId()){
-            case R.id.page1:
+            case R.id.ap:
                 i= new Intent(this, MainActivity.class);
                 startActivity(i);
                 break;
-            case R.id.page2:
+            case R.id.ui:
                 i= new Intent(this, LogInOk.class);
                 startActivity(i);
                 break;
-            case R.id.page3:
-                Toast.makeText(this, "You're already here!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page4:
+            case R.id.c:
                 i= new Intent(this, com.example.mydigitalplanner.Calendar.class);
                 startActivity(i);
                 break;
-            case R.id.page5:
+            case R.id.cl:
                 i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
+            case R.id.ft:
+                i= new Intent(this, Focus_Timer.class);
                 startActivity(i);
                 break;
         }

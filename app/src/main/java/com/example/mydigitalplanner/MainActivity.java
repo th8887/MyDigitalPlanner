@@ -3,6 +3,7 @@ package com.example.mydigitalplanner;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.mydigitalplanner.FBref.reAuth;
 import static com.example.mydigitalplanner.FBref.refDB;
+import static com.example.mydigitalplanner.FBref.refDBUC;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
     CheckBox cBstayconnect;
 
     boolean register, stayConnect;
-    String name, phone, password, email, uid;
+    String name, phone, password, email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                                         SharedPreferences.Editor editor=settings.edit();
                                         editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                         editor.commit();
+                                        //User u = new User(name,email,phone, reAuth.getUid(),cBstayconnect.isChecked());
+                                        //refDB.child(reAuth.getUid()).setValue(u);
                                         Log.d("MainActivity", "signinUserWithEmail:success");
                                         Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                         Intent si = new Intent(MainActivity.this,LogInOk.class);
@@ -246,6 +250,8 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d("MainActivity", "createUserWithEmail:success");
                                         User u= new User(name,email,phone, reAuth.getUid(),cBstayconnect.isChecked());
                                         refDB.child(reAuth.getUid()).setValue(u);
+                                        refDBUC.child(reAuth.getUid());
+
                                         Toast.makeText(MainActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
                                         Intent si = new Intent(MainActivity.this,LogInOk.class);
                                         si.putExtra("newuser",true);
@@ -276,23 +282,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.page1:
+            case R.id.ap:
                 Toast.makeText(this, "You're already here!", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.page2:
+            case R.id.ui:
                 i= new Intent(this, LogInOk.class);
                 startActivity(i);
                 break;
-            case R.id.page3:
-                i= new Intent(this, CreateMission.class);
-                startActivity(i);
-                break;
-            case R.id.page4:
+            case R.id.c:
                 i= new Intent(this, Calendar.class);
                 startActivity(i);
                 break;
-            case R.id.page5:
+            case R.id.cl:
                 i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
+            case R.id.ft:
+                i= new Intent(this, Focus_Timer.class);
                 startActivity(i);
                 break;
         }

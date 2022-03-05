@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 //can't read from database...
 
 public class LogInOk extends AppCompatActivity {
@@ -35,6 +37,8 @@ public class LogInOk extends AppCompatActivity {
     String name, email, uid,phone;
     Boolean newuser;
     Intent i;
+
+    ArrayList<String> category;
 
     User user;
 
@@ -87,6 +91,10 @@ public class LogInOk extends AppCompatActivity {
 
 
         FirebaseUser fbuser = reAuth.getCurrentUser();
+        if(fbuser == null){
+            Intent i = new Intent(LogInOk.this, MainActivity.class);
+            startActivity(i);
+        }
         uid = fbuser.getUid();
         Query query = refDB
                 .orderByChild("uID")
@@ -102,13 +110,19 @@ public class LogInOk extends AppCompatActivity {
     }
 
     public void update(View view) {
-        if (!cBconnectview.isChecked()){
+        if (!cBconnectview.isChecked()) {
             reAuth.signOut();
         }
         SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
         SharedPreferences.Editor editor=settings.edit();
-        editor.putBoolean("stayConnect",cBconnectview.isChecked());
+        editor.putBoolean("stayConnect",false);
         editor.commit();
+        phone= user.getPhone();
+        name = user.getName();
+        category = user.getCategory();
+        User u2 = new User(name,email,phone, uid,false);
+        refDB.child(uid).setValue(u2);
+
         Intent si= new Intent(LogInOk.this,MainActivity.class);
         startActivity(si);
         finish();
@@ -124,23 +138,23 @@ public class LogInOk extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.page1:
+            case R.id.ap:
                 Toast.makeText(this, "You're already here!", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.page2:
+            case R.id.ui:
                 i= new Intent(this, MainActivity.class);
                 startActivity(i);
                 break;
-            case R.id.page3:
-                i= new Intent(this, CreateMission.class);
+            case R.id.c:
+                i= new Intent(this, Calendar.class);
                 startActivity(i);
                 break;
-            case R.id.page4:
-                i= new Intent(this, com.example.mydigitalplanner.Calendar.class);
-                startActivity(i);
-                break;
-            case R.id.page5:
+            case R.id.cl:
                 i= new Intent(this, CheckList.class);
+                startActivity(i);
+                break;
+            case R.id.ft:
+                i= new Intent(this, Focus_Timer.class);
                 startActivity(i);
                 break;
         }

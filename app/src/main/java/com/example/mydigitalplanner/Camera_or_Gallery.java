@@ -76,7 +76,7 @@ public class Camera_or_Gallery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_or_gallery);
 
-        title=(TextView) findViewById(R.id.title);
+        title=(TextView) findViewById(R.id.t);
         btnS=(Button) findViewById(R.id.btnS);
         showPic=(ImageView) findViewById(R.id.showPic);
         titlePic=(EditText) findViewById(R.id.titlePic);
@@ -232,19 +232,21 @@ public class Camera_or_Gallery extends AppCompatActivity {
                     progressDialog = new ProgressDialog(Camera_or_Gallery.this);
                     progressDialog.setTitle("Uploading...");
                     progressDialog.show();
-                    SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
-                    count= settings.getInt("count",-1);
-                    if(titlePic.getText().toString().equals(""))
 
-                        path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
+                    if(titlePic.getText().toString().equals("")) {
+                        SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
+                        count = settings.getInt("count", -1);
+                        path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" + count;
+
+                        count++;
+                        SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = setting.edit();
+                        editor.putInt("count",count);
+                        editor.commit();
+                    }
                     else
                         path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
-                    count++;
 
-                    SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = setting.edit();
-                    editor.putInt("count",count);
-                    editor.commit();
 
 
                     StorageReference ref = storageReference.child(path);
@@ -285,21 +287,25 @@ public class Camera_or_Gallery extends AppCompatActivity {
                 progressDialog.setTitle("Uploading...");
                 progressDialog.show();
 
-                SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
-                count= settings.getInt("count",-1);
 
-                if(titlePic.getText().toString().equals(""))
-                    path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" +count;
+
+                if(titlePic.getText().toString().equals("")) {
+                    SharedPreferences settings= getSharedPreferences("count", MODE_PRIVATE);
+                    count= settings.getInt("count",-1);
+                    path = "images/users/" + reAuth.getCurrentUser().getUid() + "/image-" + count;
+
+                    count++;
+
+                    SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = setting.edit();
+                    editor.putInt("count",count);
+                    editor.commit();
+                }
                 else
                     path=  "images/users/" + reAuth.getCurrentUser().getUid() + "/" + titlePic.getText().toString();
 
                 UploadTask uploadTask = storageReference.child(path).putFile(photoUri);
-                count++;
 
-                SharedPreferences setting = getSharedPreferences("count", MODE_PRIVATE);
-                SharedPreferences.Editor editor = setting.edit();
-                editor.putInt("count",count);
-                editor.commit();
 
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

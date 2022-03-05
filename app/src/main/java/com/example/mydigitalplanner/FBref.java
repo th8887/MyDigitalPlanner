@@ -1,5 +1,6 @@
 package com.example.mydigitalplanner;
 
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -11,12 +12,13 @@ public class FBref {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static DatabaseReference refDB = database.getReference("Users");
-    public static DatabaseReference refDBM= database.getReference("Mission");
+    public static DatabaseReference refDBM = database.getReference("Mission");
     /**
      * refDBUC- reference to the uncompleted root.
      *
      * refDBC- reference for the completed missions.
      */
+
     public static DatabaseReference refDBUC= database.getReference(
             "Mission/"+reAuth.getCurrentUser().getUid()+"/uncompleted");
 

@@ -48,7 +48,7 @@
                 android:layout_weight="10" />
 
             <EditText
-                android:id="@+id/title"
+                android:id="@+id/t"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="80"
@@ -68,7 +68,7 @@
             android:layout_weight="2" />
 
         <TextView
-            android:id="@+id/start"
+            android:id="@+id/dateEvent"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="10"
@@ -84,7 +84,7 @@
             android:layout_weight="2" />
 
         <TextView
-            android:id="@+id/end"
+            android:id="@+id/EndEvent"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="10"

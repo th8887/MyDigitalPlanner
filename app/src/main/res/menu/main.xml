@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/page1"
+        android:id="@+id/ap"
         android:title="Auth page."
         android:orderInCategory="100"
         />
     <item
-        android:id="@+id/page2"
+        android:id="@+id/ui"
         android:title="User's info"
         android:orderInCategory="200"
         />
     <item
-        android:id="@+id/page3"
-        android:title="Create Mission"
-        android:orderInCategory="300"
+        android:id="@+id/ft"
+        android:title="Focus Timer"
+        android:orderInCategory="600"
         />
     <item
-        android:id="@+id/page4"
+        android:id="@+id/c"
         android:title="Calendar"
         android:orderInCategory="400"
         />
     <item
-        android:id="@+id/page5"
+        android:id="@+id/cl"
         android:title="Check List"
         android:orderInCategory="500"
         />
